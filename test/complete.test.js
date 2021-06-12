@@ -5,13 +5,12 @@
  *
  */
 
-var fs = require("fs");
-var nconf = require("../lib/nconf");
-var data = require("./fixtures/data").data;
-var helpers = require("./helpers");
+const fs = require("fs");
+const nconf = require("../lib/nconf");
+const helpers = require("./helpers");
 
-var completeTest = helpers.fixture("complete-test.json");
-var complete = helpers.fixture("complete.json");
+const completeTest = helpers.fixture("complete-test.json");
+const complete = helpers.fixture("complete.json");
 
 // prime the process.env
 process.env["NCONF_foo"] = "bar";

@@ -392,7 +392,7 @@ Tests are written in vows and give complete coverage of all APIs and storage eng
   $ npm test
 ```
 
-#### Author: [Charlie Robbins](http://nodejitsu.com)
+#### Author: [andreasonny83](https://github.com/andreasonny83)
 #### License: MIT
 
-[0]: http://github.com/indexzero/nconf-redis
+[0]: https://andreasonny.mit-license.org/

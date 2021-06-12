@@ -1,12 +1,13 @@
 {
   "name": "@andreasonny83/nconf",
   "description": "Fork of nconf with fix for Crypto Cipher.",
-  "version": "1.0.0",
-  "author": "Andrea Sonny <andreasonny83@gmail.com>",
+  "version": "0.0.0",
+  "author": "Andrea Sonny <https://github.com/andreasonny83>",
   "repository": {
     "type": "git",
     "url": "http://github.com/andreasonny83/nconf.git"
   },
+  "private": false,
   "dependencies": {
     "ini": "^2.0.0"
   },
@@ -23,7 +24,8 @@
     "test": "jest --verbose",
     "cover": "jest --coverage",
     "coveralls": "cat coverage/lcov.info | coveralls",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "release": "np"
   },
   "files": [
     "lib"
