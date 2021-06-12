@@ -1,7 +1,7 @@
 {
   "name": "@andreasonny83/nconf",
   "description": "Fork of nconf with fix for Crypto Cipher.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Andrea Sonny <https://github.com/andreasonny83>",
   "repository": {
     "type": "git",
