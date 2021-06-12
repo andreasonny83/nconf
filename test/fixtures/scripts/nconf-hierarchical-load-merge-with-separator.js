@@ -6,14 +6,14 @@
  *
  */
 
-var path = require('path'),
-    nconf = require('../../../lib/nconf');
+var path = require("path"),
+  nconf = require("../../../lib/nconf");
 
-nconf.argv({inputSeparator: '--'})
-     .env('__')
-     .file(path.join(__dirname, '..', 'merge', 'file1.json'));
+nconf.env("__").file(path.join(__dirname, "..", "merge", "file1.json"));
 
-process.stdout.write(JSON.stringify({
-  apples: nconf.get('apples'),
-  candy: nconf.get('candy')
-}));
+process.stdout.write(
+  JSON.stringify({
+    apples: nconf.get("apples"),
+    candy: nconf.get("candy"),
+  })
+);

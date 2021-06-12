@@ -1,8 +1,6 @@
 # nconf
 
-[![Version npm](https://img.shields.io/npm/v/nconf.svg?style=flat-square)](https://www.npmjs.com/package/nconf)[![npm Downloads](https://img.shields.io/npm/dm/nconf.svg?style=flat-square)](https://www.npmjs.com/package/nconf)[![Build Status](https://img.shields.io/travis/indexzero/nconf/master.svg?style=flat-square)](https://travis-ci.org/indexzero/nconf)[![Coverage](https://img.shields.io/coveralls/indexzero/nconf.svg?style=flat-square)](https://coveralls.io/github/indexzero/nconf)[![Dependencies](https://img.shields.io/david/indexzero/nconf.svg?style=flat-square)](https://david-dm.org/indexzero/nconf)
-
-Hierarchical node.js configuration with files, environment variables, command-line arguments, and atomic object merging.
+> Forked from nconf with fix for Node versions >= 10 and Yargs dependency removed
 
 ## Example
 Using nconf is easy; it is designed to be a simple key-value store with support for both local and remote storage. Keys are namespaced and delimited by `:`. Let's dive right into sample usage:
@@ -13,11 +11,10 @@ Using nconf is easy; it is designed to be a simple key-value store with support 
 
   //
   // Setup nconf to use (in-order):
-  //   1. Command-line arguments
-  //   2. Environment variables
-  //   3. A file located at 'path/to/config.json'
+  //   1. Environment variables
+  //   2. A file located at 'path/to/config.json'
   //
-  nconf.argv()
+  nconf
    .env()
    .file({ file: 'path/to/config.json' });
 
@@ -63,7 +60,6 @@ The output will be:
 
 Configuration management can get complicated very quickly for even trivial applications running in production. `nconf` addresses this problem by enabling you to setup a hierarchy for different sources of configuration with no defaults. **The order in which you attach these configuration sources determines their priority in the hierarchy.** Let's take a look at the options available to you
 
-  1. **nconf.argv(options)** Loads `process.argv` using yargs. If `options` is supplied it is passed along to yargs.
   2. **nconf.env(options)** Loads `process.env` into the hierarchy.
   3. **nconf.file(options)** Loads the configuration data at options.file into the hierarchy.
   4. **nconf.defaults(options)** Loads the data in options.store into the hierarchy.
@@ -83,9 +79,8 @@ A sane default for this could be:
 
   //
   // 2. `process.env`
-  // 3. `process.argv`
   //
-  nconf.env().argv();
+  nconf.env();
 
   //
   // 4. Values in `config.json`
@@ -184,7 +179,6 @@ You can also chain `.required()` calls when needed. for example when a configura
 
 ```js
 config
-  .argv()
   .env()
   .required([ 'STAGE']) //here you should have STAGE otherwise throw an error
   .file( 'stage', path.resolve( 'configs', 'stages', config.get( 'STAGE' ) + '.json' ) )
@@ -220,77 +214,10 @@ The options defined below apply to all storage engines that inherit from Memory.
 Defines the separator used to get or set data using the `get()` and `set()` methods. Even if this is changed, the default "colon" separator will be available unless explicitly disabled (see `disableDefaultAccessSeparator`).
 
 ##### `inputSeparator: string` (default: `'__'`)
-This option is used by the `argv` and `env` storage engines when loading values. Since most systems only allow dashes, underscores, and alphanumeric characters in environment variables and command line arguments, the `inputSeparator` provides a mechanism for loading hierarchical values from these sources.
+This option is used by the `env` storage engines when loading values. Since most systems only allow dashes, underscores, and alphanumeric characters in environment variables and command line arguments, the `inputSeparator` provides a mechanism for loading hierarchical values from these sources.
 
 ##### `disableDefaultAccessSeparator: {true|false}` (default: `false`)
 Disables the default access separator of `':'`, which is always available otherwise. This is mainly used to preserve legacy behavior. It can also be used to set keys that contain the default separator (e.g. `{ 'some:long:key' : 'some value' }`).
-
-### Argv
-Responsible for loading the values parsed from `process.argv` by `yargs` into the configuration hierarchy. See the [yargs option docs](https://github.com/bcoe/yargs#optionskey-opt) for more on the option format.
-
-#### Options
-
-##### `parseValues: {true|false}` (default: `false`)
-Attempt to parse well-known values (e.g. 'false', 'true', 'null', 'undefined', '3', '5.1' and JSON values)
-into their proper types. If a value cannot be parsed, it will remain a string.
-
-##### `transform: function(obj)`
-Pass each key/value pair to the specified function for transformation.
-
-The input `obj` contains two properties passed in the following format:
-``` js
-{
-  key: '<string>',
-  value: '<string>'
-}
-```
-
-The transformation function may alter both the key and the value.
-
-The function may return either an object in the same format as the input or a value that evaluates to false.
-If the return value is falsey, the entry will be dropped from the store, otherwise it will replace the original key/value.
-
-*Note: If the return value doesn't adhere to the above rules, an exception will be thrown.*
-
-#### Examples
-
-``` js
-  //
-  // Can optionally also be an object literal to pass to `yargs`.
-  //
-  nconf.argv({
-    "x": {
-      alias: 'example',
-      describe: 'Example description for usage generation',
-      demand: true,
-      default: 'some-value',
-      parseValues: true,
-      transform: function(obj) {
-        if (obj.key === 'foo') {
-          obj.value = 'baz';
-        }
-        return obj;
-      }
-    }
-  });
-```
-
-It's also possible to pass a configured yargs instance
-
-``` js
-  nconf.argv(require('yargs')
-    .version('1.2.3')
-    .usage('My usage definition')
-    .strict()
-    .options({
-      "x": {
-        alias: 'example',
-        describe: 'Example description for usage generation',
-        demand: true,
-        default: 'some-value'
-      }
-    }));
-```
 
 ### Env
 Responsible for loading the values parsed from `process.env` into the configuration hierarchy.
@@ -346,7 +273,7 @@ Allow values in the env store to be updated in the future. The default is to not
   //
   // Can also lowerCase keys.
   // Especially handy when dealing with environment variables which are usually
-  // uppercased while argv are lowercased.
+  // uppercased.
   //
 
   // Given an environment variable PORT=3001

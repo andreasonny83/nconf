@@ -5,22 +5,20 @@
  *
  */
 
-var spawn = require('child_process').spawn;
-var fs = require('fs');
-var path = require('path');
-var nconf = require('../lib/nconf');
+var spawn = require("child_process").spawn;
+var fs = require("fs");
+var path = require("path");
+var nconf = require("../lib/nconf");
 
 exports.assertMerged = function (err, merged) {
-  merged = merged instanceof nconf.Provider
-    ? merged.store.store
-    : merged;
+  merged = merged instanceof nconf.Provider ? merged.store.store : merged;
 
-  expect()
+  expect();
   expect(err).toBeNull();
-  expect(typeof merged).toBe('object');
+  expect(typeof merged).toBe("object");
   expect(merged.apples).toBeTruthy();
   expect(merged.bananas).toBeTruthy();
-  expect(typeof merged.candy).toBe('object');
+  expect(typeof merged.candy).toBe("object");
   expect(merged.candy.something1).toBeTruthy();
   expect(merged.candy.something2).toBeTruthy();
   expect(merged.candy.something3).toBeTruthy();
@@ -31,11 +29,11 @@ exports.assertMerged = function (err, merged) {
 
 //FIXME TODO
 exports.assertSystemConf = function (options) {
-  return done => {
+  return (done) => {
     var env = null;
 
     if (options.env) {
-      env = {}
+      env = {};
       Object.keys(process.env).forEach(function (key) {
         env[key] = process.env[key];
       });
@@ -45,13 +43,13 @@ exports.assertSystemConf = function (options) {
       });
     }
 
-    var child = spawn('node', [options.script].concat(options.argv), {env: env});
-    child.stdout.once('data', data => {
-      expect(data.toString()).toEqual('foobar');
+    var child = spawn("node", [options.script], { env: env });
+    child.stdout.once("data", (data) => {
+      expect(data.toString()).toEqual("foobar");
       done();
     });
-  }
-}
+  };
+};
 
 // copy a file
 exports.cp = function (from, to, callback) {
@@ -62,5 +60,5 @@ exports.cp = function (from, to, callback) {
 };
 
 exports.fixture = function (file) {
-  return path.join(__dirname, 'fixtures', file);
+  return path.join(__dirname, "fixtures", file);
 };

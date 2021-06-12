@@ -34,27 +34,28 @@ describe("nconf/multiple-stores", () => {
           whitelist: ["NODE_ENV", "FOO", "BAR"],
         });
         nconf.file({ file: completeTest });
-        nconf.use("argv", { type: "literal", store: data });
         done();
       });
     });
+
     afterAll(() => {
       fs.unlinkSync(completeTest);
       nconf.remove("file");
       nconf.remove("memory");
-      nconf.remove("argv");
       nconf.remove("env");
     });
+
     it("should have the correct `stores`", () => {
       expect(typeof nconf.stores.env).toBe("object");
-      expect(typeof nconf.stores.argv).toBe("object");
       expect(typeof nconf.stores.file).toBe("object");
     });
+
     it("env vars, are present", () => {
       ["NODE_ENV", "FOO", "BAR", "NCONF_foo"].forEach(function (key) {
         expect(nconf.get(key)).toEqual(process.env[key]);
       });
     });
+
     it("json vars are present", (done) => {
       fs.readFile(complete, "utf8", (err, data) => {
         expect(err).toBe(null);
@@ -65,11 +66,7 @@ describe("nconf/multiple-stores", () => {
         done();
       });
     });
-    it("literal vars are present", () => {
-      Object.keys(data).forEach(function (key) {
-        expect(nconf.get(key)).toEqual(data[key]);
-      });
-    });
+
     describe("saving", () => {
       afterEach(() => {
         // remove the file so that we can test saving it async
