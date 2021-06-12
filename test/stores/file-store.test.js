@@ -8,7 +8,6 @@
 var fs = require("fs");
 var path = require("path");
 var nconf = require("../../lib/nconf");
-var yamlFormat = require("nconf-yaml");
 var data = require("../fixtures/data").data;
 
 // FIXME TO RENAME
@@ -113,29 +112,6 @@ describe("nconf/stores/file", () => {
 
           expect(err).toBe(null);
           expect(JSON.parse(d.toString())).toEqual(data);
-          done();
-        });
-      });
-    });
-    it("the saveToFile() method with custom format should save the data correctly", (done) => {
-      var tmpStore = new nconf.File({ file: tmpPath });
-      var pathFile = path.join(
-        __dirname,
-        "..",
-        "fixtures",
-        "tmp-save-tofile.yaml"
-      );
-
-      Object.keys(data).forEach(function (key) {
-        tmpStore.set(key, data[key]);
-      });
-
-      tmpStore.saveToFile(pathFile, yamlFormat, function () {
-        fs.readFile(pathFile, function (err, d) {
-          fs.unlinkSync(pathFile);
-
-          expect(err).toBe(null);
-          expect(yamlFormat.parse(d.toString())).toEqual(data);
           done();
         });
       });

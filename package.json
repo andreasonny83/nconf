@@ -16,7 +16,7 @@
     "eslint": "^7.0.0",
     "istanbul": "^0.4.1",
     "jest": "^26.0.0",
-    "nconf-yaml": "^1.0.2"
+    "np": "^7.5.0"
   },
   "main": "./lib/nconf",
   "scripts": {
